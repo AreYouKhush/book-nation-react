@@ -5,6 +5,7 @@ const cors = require("cors");
 const userRouter = require('./api/routes/user');
 const commentRouter = require("./api/routes/comment");
 const noteRouter = require("./api/routes/notes")
+const libraryRouter = require('./api/routes/library')
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
@@ -17,5 +18,6 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 app.use("/notes", noteRouter);
+app.use("/library", libraryRouter);
 
 module.exports = app;

@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/Auth");
 router.get("/:bookId", async (req, res) => {
   const bookId = req.params.bookId;
   const findComments = await Comments.find({ bookid: bookId });
-  res.json(findComments);
+  res.json({comments: findComments});
 });
 
 router.post("/:bookId", authMiddleware, async (req, res) => {
@@ -36,22 +36,28 @@ router.put("/:commentId", authMiddleware, async (req, res) => {
         const found = findComment.comments.findIndex((c) => c == commentId)
         if(found != -1){
             await Comments.updateOne(
-              { _id: req.params.commentId },
+              { _id: commentId },
               { comment: req.body.comment }
             );
+            return res.json("Updated");
         }
-        return res.json("Updated");
     }
     res.json("Not Authorized");
 });
 
 router.delete("/:commentId", authMiddleware, async (req, res) => {
     const commentId = req.params.commentId;
-    await Comments.deleteOne(
-      { _id: commentId }
-    );
-    await User.findOneAndUpdate({username: res.locals.data}, {$pull: {comments: commentId}});
-    res.json("Deleted");
+    const findComment = await User.findOneAndUpdate({username: res.locals.data}, {$pull: {comments: commentId}});
+    if(findComment.comments.length !== 0){
+        const found = findComment.comments.findIndex((c) => c == commentId)
+        if(found != -1){
+            await Comments.deleteOne(
+              { _id: commentId },
+            );
+            return res.json("Deleted");
+        }
+    }
+    res.json("Not Authorized");
 })
 
 module.exports = router;

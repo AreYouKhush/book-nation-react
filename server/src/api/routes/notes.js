@@ -9,8 +9,11 @@ router.get("/:bookId", authMiddleware, async (req, res) => {
     { username: res.locals.data },
     { notes: true }
   );
-  const findBookNotes = await Notes.find({_id: findAllNotes.notes, bookid: bookId})
-  res.send({notes: findBookNotes});
+  const findBookNotes = await Notes.find({
+    _id: findAllNotes.notes,
+    bookid: bookId,
+  });
+  res.send({ notes: findBookNotes });
 });
 
 router.post("/:bookId", authMiddleware, async (req, res) => {
@@ -28,33 +31,44 @@ router.post("/:bookId", authMiddleware, async (req, res) => {
   res.json("Success");
 });
 
-router.put("/:commentId", authMiddleware, async (req, res) => {
-  const commentId = req.params.commentId;
-  const findComment = await User.findOne(
+router.put("/:noteId", authMiddleware, async (req, res) => {
+  const noteId = req.params.noteId;
+  const title = req.body.title;
+  const description = req.body.description;
+  const findNote = await User.findOne(
     { username: res.locals.data },
-    { comments: true }
+    { notes: true }
   );
-  if (findComment.comments.length !== 0) {
-    const found = findComment.comments.findIndex((c) => c == commentId);
+  if (findNote.notes.length !== 0) {
+    const found = findNote.notes.findIndex((c) => c == noteId);
     if (found != -1) {
       await Notes.updateOne(
-        { _id: req.params.commentId },
-        { comment: req.body.comment }
+        { _id: noteId },
+        { title: title,
+        description: description }
       );
+      return res.json("Updated");
     }
-    return res.json("Updated");
   }
   res.json("Not Authorized");
 });
 
-router.delete("/:commentId", authMiddleware, async (req, res) => {
-  const commentId = req.params.commentId;
-  await Notes.deleteOne({ _id: commentId });
-  await User.findOneAndUpdate(
+router.delete("/:noteId", authMiddleware, async (req, res) => {
+  const noteId = req.params.noteId;
+  const findNote = await User.findOneAndUpdate(
     { username: res.locals.data },
-    { $pull: { comments: commentId } }
+    { $pull: { notes: noteId }}
   );
-  res.json("Deleted");
+  if (findNote.notes.length !== 0) {
+    const found = findNote.notes.findIndex((c) => c == noteId);
+    if (found != -1) {
+      await Notes.deleteOne(
+        { _id: noteId }
+      );
+      return res.json("Deleted");
+    }
+  }
+  res.json("Not Authorized");
 });
 
 module.exports = router;
