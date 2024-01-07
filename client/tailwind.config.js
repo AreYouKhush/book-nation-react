@@ -5,7 +5,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#01231f",
+        secondary: "#294f4a",
+      },
+      fontFamily: {
+        fira: ['Fira Sans'],
+        oxygen: ['Oxygen'],
+        radio: ['Radio Canada']
+      }
+    },
   },
   plugins: [],
 }

@@ -6,14 +6,17 @@ const userRouter = require('./api/routes/user');
 const commentRouter = require("./api/routes/comment");
 const noteRouter = require("./api/routes/notes")
 const libraryRouter = require('./api/routes/library')
+const path = require('path');
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
+app.use(express.static('./public'))
 app.use(cors())
 
 app.get("/", (req, res) => {
-  res.json({ Message: "Connected" });
+  res.send("Connected")
 });
+
 
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
