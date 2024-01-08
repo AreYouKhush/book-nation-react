@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { bookData } from "../assets/books";
+import { url } from "../helpers/url";
 
 const FeaturedBooks = () => {
   let bookSet = new Set();
@@ -23,7 +24,7 @@ const FeaturedBooks = () => {
           {bookArr.map((n) => (
             <div key={n.title}>
               <div>
-                <img src={`http://localhost:3000/` + n.imageLink} alt="" className="w-48"/>
+                <img src={url + n.imageLink} alt="" className="w-48" />
               </div>
               <p>{n.title}</p>
               <p>{n.author}</p>
