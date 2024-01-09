@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HeroImg from "../assets/Hero Image.png";
 import FeaturedBooks from "./FeaturedBooks";
+import About from "./About";
+import Footer from "./Footer";
 
 const Home = () => {
 
   return (
     <>
-      <div className="mt-24 flex flex-col items-center justify-center">
+      <div className="mt-24 flex flex-col items-center justify-center font-fira">
         <div className="flex w-full justify-center items-center gap-12 px-24 py-8">
           <div className="w-2/6 flex flex-col justify-center items-center gap-6">
             <div className="font-fira text-4xl text-center">
@@ -25,6 +27,8 @@ const Home = () => {
           </div>
         </div>
         <FeaturedBooks></FeaturedBooks>
+        <About></About>
+        <Footer></Footer>
       </div>
     </>
   );

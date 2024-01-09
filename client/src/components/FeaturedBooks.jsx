@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { bookData } from "../assets/books";
 import { url } from "../helpers/url";
+import StarSvg from "./Star";
 
 const FeaturedBooks = () => {
   let bookSet = new Set();
@@ -14,15 +15,17 @@ const FeaturedBooks = () => {
   }
   return (
     <>
-      <div className="bg-gradient-to-r from-primary to-secondary text-gray-200 w-11/12 rounded-xl shadow-xl p-5 my-8">
-        <div className="relative text-center font-fira font-medium text-2xl pb-5">
-          <span className="mr-4">-</span>Featured Books
-          <span className="ml-4">-</span>
+      <div className="text-gray-200 w-11/12 rounded-xl shadow-xl p-8 my-8 animate-bg">
+        <div className=" flex justify-center items-center gap-2 font-fira font-medium text-2xl pb-5">
+          <div>
+            <StarSvg className="w-8"></StarSvg>
+          </div>
+          <div>Featured Books</div>
         </div>
-
-        <div className="grid grid-cols-5 place-items-center">
+      <hr />
+        <div className="grid grid-cols-5 place-items-center mt-6">
           {bookArr.map((n) => (
-            <div key={n.title} className="w-48">
+            <div key={n.title} className="w-48 flex flex-col items-center justify-center">
               <div>
                 <img
                   src={url + n.imageLink}
@@ -31,9 +34,9 @@ const FeaturedBooks = () => {
                 />
               </div>
               <div>
-                <p className="font-bold">{n.title}</p>
+                <p className="font-bold break-all">{n.title}</p>
               </div>
-              <p>{n.author}</p>
+              <p className="break-all">{n.author}</p>
             </div>
           ))}
         </div>
