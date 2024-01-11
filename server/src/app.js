@@ -2,16 +2,19 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const userRouter = require('./api/routes/user');
+const userRouter = require("./api/routes/user");
 const commentRouter = require("./api/routes/comment");
-const noteRouter = require("./api/routes/notes")
-const libraryRouter = require('./api/routes/library')
-const path = require('path');
+const noteRouter = require("./api/routes/notes");
+const libraryRouter = require("./api/routes/library");
+const path = require("path");
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "https://your-frontend.com");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://book-nation-react.vercel.app"
+  );
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
@@ -34,13 +37,12 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.static('./public'))
+app.use(express.static("./public"));
 // app.use(cors())
 
 app.get("/", (req, res) => {
-  res.send("Connected")
+  res.send("Connected");
 });
-
 
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
