@@ -14,6 +14,9 @@ export default {
         fira: ['Fira Sans'],
         oxygen: ['Oxygen'],
         radio: ['Radio Canada']
+      },
+      screens:{
+        xs: '475px'
       }
     },
   },

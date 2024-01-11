@@ -16,7 +16,6 @@ const Register = () => {
     confirmPassword: "",
   };
 
-  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
@@ -28,11 +27,11 @@ const Register = () => {
   };
 
   return (
-    <div className="mt-24 flex justify-center items-center">
-      <div className="w-2/6">
+    <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center p-10">
+      <div className="w-6/6 lg:w-2/6 sm:static absolute sm:3/6 -z-10">
         <img src={PleaseRegisterImg} alt="" />
       </div>
-      <div className="w-2/6">
+      <div className="w-3/6 lg:w-2/6">
         <Formik
           initialValues={initialValues}
           validationSchema={RegisterSchema}

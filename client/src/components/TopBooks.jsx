@@ -7,12 +7,12 @@ import Search from "./Search";
 const TopBooks = () => {
   return (
     <>
-      <div className="mt-24 font-fira px-10 flex justify-center flex-col items-center">
+      <div className="mt-24 font-fira px-2 sm:px-10 flex justify-center flex-col items-center">
         <Search></Search>
         <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-10 py-10">
           {bookData.map((b, key) => {
             return (
-              <div key={key} className="w-56">
+              <div key={key} className="max-w-56">
                 <div>
                   <img src={url + b.imageLink} alt="" className=""/>
                 </div>

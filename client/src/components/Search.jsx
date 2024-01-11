@@ -5,9 +5,11 @@ import axios from "axios";
 
 const Search = () => {
   const [search, setSearch] = useState("");
-  const { books, setBooks } = useBookContext();
+  const { books, setBooks, searching, setSearching } = useBookContext();
 
   const searchBooks = async () => {
+    setSearching(true);
+    setBooks([]);
     const newBooks = [];
     const result = await axios.get(
       `https://openlibrary.org/search.json?q=${search}`
@@ -36,8 +38,8 @@ const Search = () => {
         });
       }
     }
-    setBooks([]);
     setBooks([...newBooks]);
+    setSearching(false);
   };
 
   return (
