@@ -15,7 +15,9 @@ router.post("/signup", async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
-  const findUser = await User.findOne({ username: username });
+  const findUser = await User.findOne({
+    $or: [{ username: username }, { email: email }],
+  });
   if (findUser) {
     res.send({ msg: "User already exists" });
   } else {
@@ -31,13 +33,13 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
-  const findUser = await User.findOne({ username: username });
+  const findUser = await User.findOne({ email: email });
   if (findUser) {
     const isMatch = bcrypt.compare(password, findUser.password);
     if (isMatch) {
-      const token = jwt.sign({ username }, jwtSecret);
+      const token = jwt.sign({ email }, jwtSecret);
       res.send({ token: token });
     } else {
       res.send({ msg: "Incorrect Password" });

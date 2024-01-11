@@ -1,52 +1,55 @@
-import React from "react";
-import PleaseLoginImg from "../assets/PleaseLogin.png";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
-import CustomInput from "./CustomInput";
+import { RegisterSchema } from "../helpers/FormSchema";
 import { NavLink, useNavigate } from "react-router-dom";
-import { LoginSchema } from "../helpers/FormSchema";
+import CustomInput from "./CustomInput";
 import CircleLoader from "react-spinners/CircleLoader";
-import { url } from "../helpers/url";
+import PleaseRegisterImg from "../assets/PleaseRegister.png";
 import axios from "axios";
-import {useCookies} from 'react-cookie'
-import { useBookContext } from "../BookContext";
+import { url } from "../helpers/url";
 
-const Login = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const {mode, setMode} = useBookContext();
-  const  navigate = useNavigate()
-
+const Register = () => {
   const initialValues = {
+    username: "",
     email: "",
     password: "",
+    confirmPassword: "",
   };
 
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+
   const onSubmit = async (values, actions) => {
-    const response = await axios.post(url + 'user/signin', values);
-    if(response.data.token){
-      setCookie("token", response.data.token, {path: '/'});
-      setMode("logged-in");
-      navigate("/");
+    const response = await axios.post(url + "user/signup", values);
+    if(response.data.msg === "Success"){
+        navigate('/');
     }
+    actions.resetForm();
   };
 
   return (
-    <>
-      <div className="mt-24 flex justify-center items-center">
+    <div className="mt-24 flex justify-center items-center">
       <div className="w-2/6">
-        <img src={PleaseLoginImg} alt="" />
+        <img src={PleaseRegisterImg} alt="" />
       </div>
       <div className="w-2/6">
         <Formik
           initialValues={initialValues}
-          validationSchema={LoginSchema}
+          validationSchema={RegisterSchema}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-4 font-semibold items-center">
               <CustomInput
+                label="Username"
+                name="username"
+                type="text"
+                placeholder="Username"
+              />
+              <CustomInput
                 type="text"
                 name="email"
-                placeholder="Enter your E-mail"
+                placeholder="Enter your email"
                 label="E-mail"
               />
               <CustomInput
@@ -55,15 +58,21 @@ const Login = () => {
                 placeholder="Enter your password"
                 label="Password"
               />
-              <NavLink to="/register" className="hover:opacity-85 text-sm">
-                new? register now
+              <CustomInput
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm password"
+                label="Confirm Password"
+              />
+              <NavLink to="/login" className="hover:opacity-85 text-sm">
+                already registered? login
               </NavLink>
               <button
                 type="submit"
                 disabled={isSubmitting}
                 className={
                   isSubmitting
-                    ? "bg-primary text-white px-14 py-5 text-xl opacity-75"
+                    ? "bg-primary text-white px-16 py-5 text-xl opacity-75"
                     : "bg-primary text-white px-10 py-5 text-xl hover:bg-secondary duration-150"
                 }
               >
@@ -78,7 +87,7 @@ const Login = () => {
                     />
                   </>
                 ) : (
-                  "Login"
+                  "Register"
                 )}
               </button>
             </Form>
@@ -86,8 +95,7 @@ const Login = () => {
         </Formik>
       </div>
     </div>
-    </>
   );
 };
 
-export default Login;
+export default Register;
