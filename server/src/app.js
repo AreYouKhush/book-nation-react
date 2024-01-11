@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 });
 app.use(
   cors({
-    origin: ["https://book-nation-react.vercel.app/"],
+    origin: ["https://book-nation-react.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
