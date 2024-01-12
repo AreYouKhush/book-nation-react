@@ -37,7 +37,7 @@ router.post("/signin", async (req, res) => {
   const password = req.body.password;
   const findUser = await User.findOne({ email: email });
   if (findUser) {
-    const isMatch = bcrypt.compare(password, findUser.password);
+    const isMatch = await bcrypt.compare(password, findUser.password);
     if (isMatch) {
       const token = jwt.sign({ email }, jwtSecret);
       res.send({ token: token });

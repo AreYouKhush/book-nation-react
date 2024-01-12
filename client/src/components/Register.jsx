@@ -16,13 +16,19 @@ const Register = () => {
     confirmPassword: "",
   };
 
+  const [msg, setMsg] = useState("");
+
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
     const response = await axios.post(url + "user/signup", values);
     if(response.data.msg === "Success"){
-        navigate('/');
+        navigate('/login');
     }
+    setMsg(response.data.msg);
+    setTimeout(()=>{
+      setMsg("");
+    }, 2000)
     actions.resetForm();
   };
 
@@ -63,9 +69,10 @@ const Register = () => {
                 placeholder="Confirm password"
                 label="Confirm Password"
               />
-              <NavLink to="/login" className="hover:opacity-85 text-sm">
+              <NavLink to="/login" className="hover:opacity-85 text-sm font-bold underline">
                 already registered? login
               </NavLink>
+              {msg !== "" && <div className="text-red-500 font-bold text-sm">{msg}</div>}
               <button
                 type="submit"
                 disabled={isSubmitting}

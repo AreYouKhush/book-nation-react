@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useBookContext } from "../BookContext";
 import axios from "axios";
@@ -35,11 +35,22 @@ const Search = () => {
           title: result.data.docs[i].title,
           publishYear: result.data.docs[i].first_publish_year,
           authorName: authorName,
+          totalRating: result.data.docs[i].ratings_average,
+          ratingsByStars: {
+            one: result.data.docs[i].ratings_count_1,
+            two: result.data.docs[i].ratings_count_2,
+            three: result.data.docs[i].ratings_count_3,
+            four: result.data.docs[i].ratings_count_4,
+            five: result.data.docs[i].ratings_count_5
+          },
+          characters: result.data.docs[i].person,
+          editions: result.data.docs[i].edition_key
         });
       }
     }
     setBooks([...newBooks]);
     setSearching(false);
+    localStorage.setItem("books", JSON.stringify(newBooks));
   };
 
   return (

@@ -24,7 +24,9 @@ const Home = () => {
             </div>
             {mode === "logged-out" ? (
               <button className="bg-primary px-8 py-4 text-white font-fira font-bold text-xl hover:bg-secondary duration-150">
+                <NavLink to="login">
               Join Now
+                </NavLink>
             </button>
             ) : (
               <button className="bg-primary px-8 py-4 text-white font-fira font-bold text-xl hover:bg-secondary duration-150">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PleaseLoginImg from "../assets/PleaseLogin.png";
 import { Formik, Form } from "formik";
 import CustomInput from "./CustomInput";
@@ -14,6 +14,7 @@ const Login = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const { mode, setMode } = useBookContext();
   const navigate = useNavigate();
+  const [msg, setMsg] = useState("");
 
   const initialValues = {
     email: "",
@@ -27,15 +28,20 @@ const Login = () => {
       setMode("logged-in");
       navigate("/");
     }
+    setMsg(response.data.msg);
+    setTimeout(()=>{
+      setMsg("");
+    }, 2000)
+    actions.resetForm();
   };
 
   return (
     <>
-      <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center">
+      <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center p-10">
         <div className="w-6/6 lg:w-2/6 sm:static absolute sm:3/6 -z-10">
           <img src={PleaseLoginImg} alt="" />
         </div>
-        <div className="w-3/6 lg:w-2/6">
+        <div className="w-6/6 lg:w-2/6">
           <Formik
             initialValues={initialValues}
             validationSchema={LoginSchema}
@@ -55,9 +61,10 @@ const Login = () => {
                   placeholder="Enter your password"
                   label="Password"
                 />
-                <NavLink to="/register" className="hover:opacity-85 text-sm">
+                <NavLink to="/register" className="hover:opacity-85 text-sm font-bold underline">
                   new? register now
                 </NavLink>
+                {msg !== "" && <div className="text-red-500 font-bold text-sm">{msg}</div>}
                 <button
                   type="submit"
                   disabled={isSubmitting}

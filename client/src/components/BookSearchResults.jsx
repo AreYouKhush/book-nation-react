@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect} from "react";
 import { useBookContext } from "../BookContext";
 import Search from "./Search";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import Footer from "./Footer";
+import { NavLink } from "react-router-dom";
 
 const BookSearchResults = () => {
-  const { books, searching, setSearching } = useBookContext();
+  const { books, setBooks, searching, setSearching } = useBookContext();
+
+  useEffect(()=> {
+    if(JSON.parse(localStorage.getItem("books"))){
+      if(JSON.parse(localStorage.getItem("books")).length !== 0){
+        const newBooks = JSON.parse(localStorage.getItem("books"))
+        setBooks([...newBooks]);
+        setSearching(false);
+      }else{
+        setSearching(true);
+      }
+    }
+  }, [])
 
   return (
     <>
@@ -24,13 +37,15 @@ const BookSearchResults = () => {
           <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-10 py-10">
             {books.map((b, key) => {
               return (
-                <div key={key} className="max-w-56">
+                <NavLink to={`/bookinfo`+ b.id } key={key}>
+                <div className="max-w-56 cursor-pointer">
                   <div>
                     <img src={b.coverURL} alt="" className="" />
                   </div>
                   <div className="font-bold">{b.title}</div>
                   <div>{b.authorName}</div>
                 </div>
+                </NavLink>
               );
             })}
           </div>

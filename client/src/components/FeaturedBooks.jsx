@@ -23,7 +23,7 @@ const FeaturedBooks = () => {
           <div>Featured Books</div>
         </div>
       <hr />
-        <div className="grid grid-cols-2 gap-3 place-items-center md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 md:place-items-center mt-6 overflow-x-scroll">
+        <div className="grid grid-cols-2 gap-3 place-items-center md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 md:place-items-center mt-6">
           {bookArr.map((n) => (
             <div key={n.title} className="w-36 lg:w-36 xl:w-48 flex flex-col justify-center whitespace-nowrap overflow-hidden text-ellipsis">
               <div className="flex justify-center">
