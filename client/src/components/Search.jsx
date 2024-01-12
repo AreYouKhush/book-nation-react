@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useBookContext } from "../BookContext";
 import axios from "axios";
+import PacmanLoader from "react-spinners/CircleLoader";
+import CircleLoader from "react-spinners/CircleLoader";
 
 const Search = () => {
   const [search, setSearch] = useState("");
   const { books, setBooks, searching, setSearching } = useBookContext();
+  const [bookSearching, setBookSearching] = useState(false);
 
   const searchBooks = async () => {
     setSearching(true);
+    setBookSearching(true);
     setBooks([]);
     const newBooks = [];
     const result = await axios.get(
@@ -50,6 +54,7 @@ const Search = () => {
     }
     setBooks([...newBooks]);
     setSearching(false);
+    setBookSearching(false);
     localStorage.setItem("books", JSON.stringify(newBooks));
   };
 
@@ -63,12 +68,20 @@ const Search = () => {
           placeholder="Search a book"
           className="w-full px-10 py-4 rounded-full bg-gray-300 font-semibold text-primary shadow-md shadow-gray-300 focus:outline-none focus:shadow-lg"
         />
+        {bookSearching ? (
+          <div className="absolute right-1 top-1 bg-primary text-white font-semibold px-6 py-3 rounded-full">
+          <CircleLoader
+            color={"#ffffff"}
+            size={25}/>
+          </div>
+        ) : (
         <button
           className="absolute right-1 top-1 bg-primary text-white font-semibold px-6 py-3 rounded-full"
           onClick={searchBooks}
         >
           <NavLink to="/booksearch">Search</NavLink>
         </button>
+        )}
       </div>
     </>
   );

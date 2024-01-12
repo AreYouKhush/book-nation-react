@@ -18,7 +18,7 @@ router.post("/:bookId", authMiddleware, async (req, res) => {
 
   const user = await User.findOneAndUpdate(
     {
-      username: res.locals.data,
+      email: res.locals.data,
     },
     {
       $push: {
@@ -26,12 +26,12 @@ router.post("/:bookId", authMiddleware, async (req, res) => {
       },
     }
   );
-  res.json("Success");
+  res.json({_id: _id});
 });
 
 router.put("/:commentId", authMiddleware, async (req, res) => {
     const commentId = req.params.commentId;
-    const findComment = await User.findOne({username: res.locals.data}, {comments: true});
+    const findComment = await User.findOne({email: res.locals.data}, {comments: true});
     if(findComment.comments.length !== 0){
         const found = findComment.comments.findIndex((c) => c == commentId)
         if(found != -1){
@@ -47,7 +47,7 @@ router.put("/:commentId", authMiddleware, async (req, res) => {
 
 router.delete("/:commentId", authMiddleware, async (req, res) => {
     const commentId = req.params.commentId;
-    const findComment = await User.findOneAndUpdate({username: res.locals.data}, {$pull: {comments: commentId}});
+    const findComment = await User.findOneAndUpdate({email: res.locals.data}, {$pull: {comments: commentId}});
     if(findComment.comments.length !== 0){
         const found = findComment.comments.findIndex((c) => c == commentId)
         if(found != -1){

@@ -6,7 +6,7 @@ const authMiddleware = require("../middlewares/Auth");
 router.get("/:bookId", authMiddleware, async (req, res) => {
   const bookId = req.params.bookId;
   const findAllNotes = await User.findOne(
-    { username: res.locals.data },
+    { email: res.locals.data },
     { notes: true }
   );
   const findBookNotes = await Notes.find({
@@ -25,10 +25,11 @@ router.post("/:bookId", authMiddleware, async (req, res) => {
   const { _id } = await newNote.save();
 
   await User.findOneAndUpdate(
-    { username: res.locals.data },
+    { email: res.locals.data },
     { $push: { notes: _id } }
   );
-  res.json("Success");
+
+  res.json({msg: "Success"});
 });
 
 router.put("/:noteId", authMiddleware, async (req, res) => {
@@ -36,7 +37,7 @@ router.put("/:noteId", authMiddleware, async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
   const findNote = await User.findOne(
-    { username: res.locals.data },
+    { email: res.locals.data },
     { notes: true }
   );
   if (findNote.notes.length !== 0) {
@@ -56,7 +57,7 @@ router.put("/:noteId", authMiddleware, async (req, res) => {
 router.delete("/:noteId", authMiddleware, async (req, res) => {
   const noteId = req.params.noteId;
   const findNote = await User.findOneAndUpdate(
-    { username: res.locals.data },
+    { email: res.locals.data },
     { $pull: { notes: noteId }}
   );
   if (findNote.notes.length !== 0) {

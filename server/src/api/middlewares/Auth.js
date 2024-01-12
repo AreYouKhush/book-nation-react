@@ -9,7 +9,7 @@ function Auth(req, res, next) {
     if(isVerify){
         decoded = jwt.decode(token, jwtsecret);
     }
-    res.locals.data = decoded.username;
+    res.locals.data = decoded.email;
     next();
   }catch(err){
     res.json({msg: err})
