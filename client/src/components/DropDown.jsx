@@ -115,6 +115,9 @@ const DropDown = (props) => {
                 </button>
               </div>
               <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
+                <NavLink to="/">Home</NavLink>
+              </button>
+              <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
                 <NavLink to="topbooks">Top Books</NavLink>
               </button>
               <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">

@@ -91,7 +91,7 @@ const Search = ({ searchInput }) => {
 
   return (
     <>
-      <div className="w-9/12 flex relative">
+      <div className="w-10/12 flex relative">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}

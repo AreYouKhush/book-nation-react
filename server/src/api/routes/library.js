@@ -8,13 +8,26 @@ router.get("/", authMiddleware, async (req, res) => {
     { email: res.locals.data },
     { library: true }
   );
-  res.json({ library: findLib });
+  let correctBooks = findLib[0].library;
+  correctBooks = correctBooks.map((m) => "/works/" + m);
+  const findBooks = await Books.find({
+    $or: [{ email: res.locals.data }, { id: { $in: [...correctBooks] } }],
+  });
+  res.json({ library: findBooks });
 });
 
 router.post("/works/:bookId", authMiddleware, async (req, res) => {
-  await User.findOneAndUpdate({email: res.locals.data}, {$push: {library: req.params.bookId}})
-  const newBook = new Books({ ...req.body });
-  await newBook.save();
+  const alreadyAdded = await User.findOne({ library: req.params.bookId });
+  if (alreadyAdded === null) {
+    await User.findOneAndUpdate(
+      { email: res.locals.data },
+      { $push: { library: req.params.bookId } }
+    );
+  }
+  try {
+    const newBook = new Books({ ...req.body });
+    await newBook.save();
+  } catch (err) {}
   res.json({ msg: "Added" });
 });
 

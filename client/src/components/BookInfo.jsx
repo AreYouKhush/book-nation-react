@@ -60,6 +60,16 @@ const BookInfo = () => {
       });
   };
 
+  const hasBook = async () => {
+    const findBook = books.findIndex((b) => b.id === "/works/" + bookid);
+    if(findBook === -1){
+      const response = await axios.get(url + "book/works/" + bookid);
+      setBookData({...response.data.book});
+    }else{
+      getMoreInfo();
+    }
+  };
+
   const postComment = async () => {
     if (comment.trim() !== "") {
       const response = await axios.post(
@@ -76,7 +86,6 @@ const BookInfo = () => {
         comment: comment,
         deletable: true,
       };
-      console.log(newComment);
       setPrevComments((prev) => [...prev, newComment]);
     }
     setComment("");
@@ -88,20 +97,22 @@ const BookInfo = () => {
         token: cookies.token,
       },
     });
-    const lib = response.data.library[0].library;
-    const findBook = lib.findIndex((b) => b == bookid);
-    if (findBook !== -1) {
-      setInLib(true);
+    if (response.data.library.length !== 0) {
+      const lib = response.data.library[0].library;
+      const findBook = lib.findIndex((b) => b == bookid);
+      console.log("Mai Andar hu");
+      if (findBook !== -1) {
+        setInLib(true);
+      }
     }
-    console.log(inLib);
   };
 
   useEffect(() => {
     if (JSON.parse(localStorage.getItem("books"))) {
       const newBooks = JSON.parse(localStorage.getItem("books"));
       books = [...newBooks];
+      hasBook();
     }
-    getMoreInfo();
     if (mode === "logged-in") {
       isInLibrary();
     }

@@ -6,6 +6,7 @@ const userRouter = require("./api/routes/user");
 const commentRouter = require("./api/routes/comment");
 const noteRouter = require("./api/routes/notes");
 const libraryRouter = require("./api/routes/library");
+const bookRouter = require("./api/routes/book")
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
@@ -47,5 +48,6 @@ app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 app.use("/notes", noteRouter);
 app.use("/library", libraryRouter);
+app.use("/book", bookRouter)
 
 module.exports = app;

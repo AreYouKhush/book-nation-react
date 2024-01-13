@@ -6,7 +6,7 @@ const CustomInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div className="flex flex-col font-fira bg-secondary p-5 rounded-full">
+      <div className="flex flex-col font-fira bg-secondary p-2 rounded-3xl">
         <label className="text-white">{label} :</label>
         <input
         autoComplete="off"

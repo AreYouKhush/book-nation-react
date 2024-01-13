@@ -24,10 +24,16 @@ const Navbar = () => {
           <div className="w-20 sm:w-24 mix-blend-luminosity">
             <img src={Logo} alt="" />
           </div>
-          <div className="text-3xl sm:text-4xl font-medium">
+          <div className="text-3xl md:text-4xl font-medium">
             <NavLink to="/">Book Nation</NavLink>
           </div>
           <div className="mx-3 sm:flex gap-3 font-radio hidden sm:visible">
+            <NavLink
+              to="/"
+              className="bg-secondary rounded-full px-4 py-2 hover:bg-emerald-900 duration-100"
+            >
+              Home
+            </NavLink>
             <NavLink
               to="library"
               className="bg-secondary rounded-full px-4 py-2 hover:bg-emerald-900 duration-100"
@@ -72,9 +78,12 @@ const Navbar = () => {
             </NavLink>
           ) : (
             <button onClick={logout}>
-              <NavLink className="bg-gray-300 text-primary px-6 py-3 font-semibold hover:bg-gray-500 hover:text-gray-300 duration-200">
+              <a
+                href="/"
+                className="bg-gray-300 text-primary px-6 py-3 font-semibold hover:bg-gray-500 hover:text-gray-300 duration-200"
+              >
                 Logout
-              </NavLink>
+              </a>
             </button>
           )}
         </div>

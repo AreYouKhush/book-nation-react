@@ -44,7 +44,7 @@ const Register = () => {
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
-            <Form className="flex flex-col gap-4 font-semibold items-center">
+            <Form className="flex flex-col gap-4 font-semibold items-center text-sm mt-14">
               <CustomInput
                 label="Username"
                 name="username"
@@ -69,7 +69,7 @@ const Register = () => {
                 placeholder="Confirm password"
                 label="Confirm Password"
               />
-              <NavLink to="/login" className="hover:opacity-85 text-sm font-bold underline">
+              <NavLink to="/login" className="hover:opacity-85 text-sm font-bold underline whitespace-nowrap">
                 already registered? login
               </NavLink>
               {msg !== "" && <div className="text-red-500 font-bold text-sm">{msg}</div>}
