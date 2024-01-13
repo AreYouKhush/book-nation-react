@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  email: {
+  email: {  
     type: String,
     unique: true,
     required: true,
@@ -37,8 +37,27 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
+const bookSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    unique: true
+  },
+  links: Array,
+  publishYear: Number,
+  authorName: String,
+  characters: Array,
+  coverURL: String,
+  description: String,
+  ratingsByStars: Object,
+  title: String,
+  totalRating: Number
+})
+
+const Books = mongoose.model("Books", bookSchema);
+
 module.exports = {
   User,
   Notes,
   Comments,
+  Books
 };

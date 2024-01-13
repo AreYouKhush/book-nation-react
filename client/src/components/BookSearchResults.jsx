@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useBookContext } from "../BookContext";
 import Search from "./Search";
 import PacmanLoader from "react-spinners/PacmanLoader";
@@ -7,18 +7,6 @@ import { NavLink } from "react-router-dom";
 
 const BookSearchResults = () => {
   const { books, setBooks, searching, setSearching } = useBookContext();
-
-  useEffect(()=> {
-    if(JSON.parse(localStorage.getItem("books"))){
-      if(JSON.parse(localStorage.getItem("books")).length !== 0){
-        const newBooks = JSON.parse(localStorage.getItem("books"))
-        setBooks([...newBooks]);
-        setSearching(false);
-      }else{
-        setSearching(true);
-      }
-    }
-  }, [])
 
   return (
     <>
@@ -33,18 +21,24 @@ const BookSearchResults = () => {
             data-testid="loader"
             className="my-32"
           />
+        ) : books.length === 0 ? (
+          <div className="my-32 font-bold text-2xl">No Books!</div>
         ) : (
-          <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-10 py-10">
+          <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-10 py-10">
             {books.map((b, key) => {
               return (
-                <NavLink to={`/bookinfo`+ b.id } key={key}>
-                <div className="max-w-56 cursor-pointer">
-                  <div>
-                    <img src={b.coverURL} alt="" className="" />
+                <NavLink to={`/bookinfo` + b.id} key={key}>
+                  <div className="max-w-56 cursor-pointer">
+                    <div>
+                      <img
+                        src={b.coverURL}
+                        alt=""
+                        className="aspect-square h-80 object-contain"
+                      />
+                    </div>
+                    <div className="font-bold">{b.title}</div>
+                    <div>{b.authorName}</div>
                   </div>
-                  <div className="font-bold">{b.title}</div>
-                  <div>{b.authorName}</div>
-                </div>
                 </NavLink>
               );
             })}

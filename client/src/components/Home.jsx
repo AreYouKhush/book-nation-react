@@ -41,11 +41,6 @@ const Home = () => {
           </div>
         </div>
         <FeaturedBooks></FeaturedBooks>
-        {/* <div className="w-9/12 flex relative">
-          <input type="text" placeholder="Search a book" className="w-full px-10 py-4 rounded-full bg-gray-300 font-semibold text-primary shadow-md shadow-gray-300 focus:outline-none focus:shadow-lg"/>
-          <button className="absolute right-1 top-1 bg-primary text-white font-semibold px-6 py-3 rounded-full">Search</button>
-        </div> */}
-        <Search></Search>
         <About></About>
         <Footer></Footer>
       </div>

@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { bookData } from "../assets/books";
 import { url } from "../helpers/url";
 import StarSvg from "./Star";
+import Search from "./Search";
 
 const FeaturedBooks = () => {
   let bookSet = new Set();
   let bookArr = [];
+  const [searchInput, setSearchInput] = useState("");
   while (bookSet.size < 5) {
     let newBook = bookData[Math.floor(Math.random() * 100)];
     bookSet.add(newBook);
@@ -22,10 +24,16 @@ const FeaturedBooks = () => {
           </div>
           <div>Featured Books</div>
         </div>
-      <hr />
+        <hr />
         <div className="grid grid-cols-2 gap-3 place-items-center md:grid-cols-5 sm:grid-cols-4 xs:grid-cols-3 md:place-items-center mt-6">
           {bookArr.map((n) => (
-            <div key={n.title} className="w-36 lg:w-36 xl:w-48 flex flex-col justify-center whitespace-nowrap overflow-hidden text-ellipsis">
+            <div
+              key={n.title}
+              className="w-36 lg:w-36 xl:w-48 flex flex-col justify-center whitespace-nowrap overflow-hidden text-ellipsis cursor-pointer"
+              onClick={() => {
+                setSearchInput(n.title);
+              }}
+            >
               <div className="flex justify-center">
                 <img
                   src={url + n.imageLink}
@@ -41,6 +49,7 @@ const FeaturedBooks = () => {
           ))}
         </div>
       </div>
+      <Search searchInput={searchInput}></Search>
     </>
   );
 };
