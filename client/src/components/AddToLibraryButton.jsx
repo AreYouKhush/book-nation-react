@@ -19,6 +19,7 @@ const AddToLibraryButton = ({ bookData, inLib, setInLib }) => {
     if (response.data.msg === "Added") {
       setInLib(true);
     }
+    localStorage.removeItem("library");
   };
 
   const removeBook = async () => {

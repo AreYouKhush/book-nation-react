@@ -19,8 +19,12 @@ const ReadToggle = ({ isRead, setIsRead, bookid }) => {
 
   const checkIfRead = () => {
     const LibBooks = JSON.parse(localStorage.getItem("library"));
-    const { read } = LibBooks.find((l) => l.bookid === bookid);
-    setIsRead(read);
+    const book = LibBooks.find((l) => l.bookid === bookid);
+    if(book === undefined){
+      setIsRead(false);
+    }else{
+      setIsRead(book.read)
+    }
   };
 
   const makeItRead = async () => {
