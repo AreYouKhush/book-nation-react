@@ -11,6 +11,7 @@ const Library = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const { mode } = useBookContext();
   const [lib, setLib] = useState();
+  const [temp, setTemp] = useState();
 
   const getLib = async () => {
     const response = await axios.get(url + "library", {
@@ -18,7 +19,41 @@ const Library = () => {
         token: cookies.token,
       },
     });
-    setLib([...response.data.library]);
+    const libRecieved = response.data.library;
+    const bookStats = response.data.bookStats;
+    try {
+      const modLib = libRecieved.map((l) => ({
+        ...l,
+        read: bookStats.some((bs) => {
+          if (l.id === bs.bookid) {
+            return bs.read;
+          }
+        }),
+      }));
+      setLib([...modLib]);
+      setTemp([...modLib]);
+    } catch (err) {}
+  };
+
+  const toRead = () => {
+    try {
+      const filtered = temp.filter((t) => t.read === false);
+      setLib([...filtered]);
+    } catch (err) {}
+    // del = del.sort((a, b) => a.deletable === b.deletable ? 0 : a.deletable? 1 : -1);
+  };
+
+  const alreadyRead = () => {
+    try {
+      const filtered = temp.filter((t) => t.read === true);
+      setLib([...filtered]);
+    } catch (err) {}
+  };
+
+  const allBooks = () => {
+    try {
+      setLib([...temp]);
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -31,18 +66,30 @@ const Library = () => {
         <div className="xs:px-10 px-3 flex flex-col gap-5 ">
           <div className="flex gap-4 sm:items-center sm:flex-row flex-col-reverse">
             <div className="flex gap-2 xs:gap-4 items-center justify-center">
-              <div className="rounded-full text-sm xs:text-base px-5 py-3 bg-gray-300 shadow-md hover:shadow-lg shadow-neutral-300 cursor-pointer hover:bg-gray-500 duration-150 font-semibold hover:text-white">
-                Books To Read
+              <div
+                className="rounded-full text-sm xs:text-base px-5 py-3 bg-gray-300 shadow-md hover:shadow-lg shadow-neutral-300 cursor-pointer hover:bg-gray-500 duration-150 font-semibold hover:text-white active:bg-black"
+                onClick={allBooks}
+              >
+                All
               </div>
-              <div className="rounded-full text-sm xs:text-base px-5 py-3 bg-gray-300 shadow-md hover:shadow-lg shadow-neutral-300 cursor-pointer hover:bg-gray-500 duration-150 font-semibold hover:text-white">
-                Books You've Finished
+              <div
+                className="rounded-full text-sm xs:text-base px-5 py-3 bg-gray-300 shadow-md hover:shadow-lg shadow-neutral-300 cursor-pointer hover:bg-gray-500 duration-150 font-semibold hover:text-white"
+                onClick={toRead}
+              >
+                To Read
+              </div>
+              <div
+                className="rounded-full text-sm xs:text-base px-5 py-3 bg-gray-300 shadow-md hover:shadow-lg shadow-neutral-300 cursor-pointer hover:bg-gray-500 duration-150 font-semibold hover:text-white"
+                onClick={alreadyRead}
+              >
+                Already Read
               </div>
             </div>
             <div className="flex-1 flex justify-center">
               <Search></Search>
             </div>
           </div>
-          {lib?.length === 0 ? (
+          {lib?.length === 0 || mode === "logged-out" ? (
             <div className="h-96 flex justify-center items-center bg-slate-100 rounded-lg shadow-md relative">
               <div className="absolute text-black font-bold text-xl top-3 w-11/12 text-center">
                 Your Library
@@ -62,7 +109,7 @@ const Library = () => {
                   <div className=" text-black font-bold text-xl text-center">
                     My Library
                   </div>
-                  <hr className="border-black w-full pb-3 sm:pb-0 lg:pb-3"/>
+                  <hr className="border-black w-full pb-3 sm:pb-0 lg:pb-3" />
                 </div>
                 <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-10">
                   {lib?.map((b, key) => {

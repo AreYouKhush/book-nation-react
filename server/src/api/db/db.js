@@ -24,13 +24,21 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  email: {  
+  email: {
     type: String,
     unique: true,
     required: true,
   },
   password: String,
-  library: Array,
+  library: [
+    {
+      bookid: String,
+      read: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   comments: [{ type: "ObjectId", ref: "Comments" }],
   notes: [{ type: "ObjectId", ref: "Notes" }],
 });
@@ -40,7 +48,7 @@ const User = mongoose.model("User", UserSchema);
 const bookSchema = new mongoose.Schema({
   id: {
     type: String,
-    unique: true
+    unique: true,
   },
   links: Array,
   publishYear: Number,
@@ -50,8 +58,8 @@ const bookSchema = new mongoose.Schema({
   description: String,
   ratingsByStars: Object,
   title: String,
-  totalRating: Number
-})
+  totalRating: Number,
+});
 
 const Books = mongoose.model("Books", bookSchema);
 
@@ -59,5 +67,5 @@ module.exports = {
   User,
   Notes,
   Comments,
-  Books
+  Books,
 };

@@ -15,6 +15,7 @@ const Navbar = () => {
   const logout = () => {
     removeCookie("token");
     setMode("logged-out");
+    localStorage.removeItem("library")
   };
 
   return (

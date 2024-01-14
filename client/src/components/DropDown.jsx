@@ -51,6 +51,7 @@ const DropDown = (props) => {
 
   const logout = () => {
     removeCookie("token");
+    localStorage.removeItem("library")
     setMode("logged-out");
   };
 

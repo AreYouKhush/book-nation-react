@@ -13,6 +13,7 @@ import { useCookies } from "react-cookie";
 import AddToLibraryButton from "./AddToLibraryButton";
 import { useBookContext } from "../BookContext";
 import Comment from "./Comment";
+import ReadToggle from "./ReadToggle";
 
 const BookInfo = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -23,6 +24,7 @@ const BookInfo = () => {
   const [comment, setComment] = useState("");
   const [inLib, setInLib] = useState(false);
   const [prevComments, setPrevComments] = useState([]);
+  const [isRead, setIsRead] = useState(false);
   const navigate = useNavigate();
 
   let books = [];
@@ -62,10 +64,10 @@ const BookInfo = () => {
 
   const hasBook = async () => {
     const findBook = books.findIndex((b) => b.id === "/works/" + bookid);
-    if(findBook === -1){
+    if (findBook === -1) {
       const response = await axios.get(url + "book/works/" + bookid);
-      setBookData({...response.data.book});
-    }else{
+      setBookData({ ...response.data.book });
+    } else {
       getMoreInfo();
     }
   };
@@ -92,19 +94,20 @@ const BookInfo = () => {
   };
 
   const isInLibrary = async () => {
-    const response = await axios.get(url + "library", {
-      headers: {
-        token: cookies.token,
-      },
-    });
-    if (response.data.library.length !== 0) {
-      const lib = response.data.library[0].library;
-      const findBook = lib.findIndex((b) => b == bookid);
-      console.log("Mai Andar hu");
-      if (findBook !== -1) {
-        setInLib(true);
+    try {
+      const response = await axios.get(url + "library", {
+        headers: {
+          token: cookies.token,
+        },
+      });
+      if (response.data.library.length !== 0) {
+        const lib = response.data.library;
+        const findBook = lib.findIndex((b) => b.id === "/works/" + bookid);
+        if (findBook !== -1) {
+          setInLib(true);
+        }
       }
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -113,9 +116,7 @@ const BookInfo = () => {
       books = [...newBooks];
       hasBook();
     }
-    if (mode === "logged-in") {
-      isInLibrary();
-    }
+    isInLibrary();
   }, []);
 
   return (
@@ -125,14 +126,24 @@ const BookInfo = () => {
         <div className="m-5 xs:m-10 p-5 rounded-lg bg-gray-200 flex flex-col items-center sm:items-start sm:flex-row gap-9 w-11/12">
           <div className="w-2/6 flex flex-col items-center gap-2">
             <img className="max-w-64 max-h-80" src={bookData.coverURL} alt="" />
-            <AddToLibraryButton
-              bookData={bookData}
-              inLib={inLib}
-              setInLib={setInLib}
-            ></AddToLibraryButton>
+            <div className="flex gap-3 flex-row justify-center items-center sm:flex-col">
+              <AddToLibraryButton
+                bookData={bookData}
+                inLib={inLib}
+                setInLib={setInLib}
+              ></AddToLibraryButton>
+              {inLib && (
+                <ReadToggle
+                  inLib={inLib}
+                  isRead={isRead}
+                  setIsRead={setIsRead}
+                  bookid={bookid}
+                ></ReadToggle>
+              )}
+            </div>
           </div>
           <div className="max-w-4/6">
-            <div className="font-bold text-3xl sm:text-4xl break-all">
+            <div className="font-bold text-2xl sm:text-4xl break-all flex flex-row justify-between items-center">
               {bookData.title}
             </div>
             <div className="font-semibold text-lg sm:text-xl break-all">

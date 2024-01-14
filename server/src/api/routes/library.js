@@ -9,21 +9,24 @@ router.get("/", authMiddleware, async (req, res) => {
     { library: true }
   );
   let correctBooks = findLib[0].library;
-  correctBooks = correctBooks.map((m) => "/works/" + m);
+  const bookToFind = correctBooks.map((m) => (m.bookid = "/works/" + m.bookid));
   const findBooks = await Books.find({
-    $or: [{ email: res.locals.data }, { id: { $in: [...correctBooks] } }],
+    $or: [{ email: res.locals.data }, { id: { $in: [...bookToFind] } }],
   });
-  res.json({ library: findBooks });
+  res.json({ library: findBooks, bookStats: correctBooks });
 });
 
 router.post("/works/:bookId", authMiddleware, async (req, res) => {
   const alreadyAdded = await User.findOne({
-    $or: [{ email: res.locals.data, library: req.params.bookId }],
+    $or: [{ email: res.locals.data, library: { bookid: req.params.bookId } }],
   });
   if (alreadyAdded === null) {
+    const newBook = {
+      bookid: req.params.bookId,
+    };
     await User.findOneAndUpdate(
       { email: res.locals.data },
-      { $push: { library: req.params.bookId } }
+      { $push: { library: newBook } }
     );
   }
   try {
@@ -36,7 +39,7 @@ router.post("/works/:bookId", authMiddleware, async (req, res) => {
 router.delete("/:bookId", authMiddleware, async (req, res) => {
   await User.updateOne(
     { email: res.locals.data },
-    { $pull: { library: req.params.bookId } }
+    { $pull: { library: { bookid: req.params.bookId } } }
   );
   res.json("Deleted");
 });
