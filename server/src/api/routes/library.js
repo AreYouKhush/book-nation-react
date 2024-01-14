@@ -17,7 +17,9 @@ router.get("/", authMiddleware, async (req, res) => {
 });
 
 router.post("/works/:bookId", authMiddleware, async (req, res) => {
-  const alreadyAdded = await User.findOne({ library: req.params.bookId });
+  const alreadyAdded = await User.findOne({
+    $or: [{ email: res.locals.data, library: req.params.bookId }],
+  });
   if (alreadyAdded === null) {
     await User.findOneAndUpdate(
       { email: res.locals.data },
