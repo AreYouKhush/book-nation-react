@@ -62,7 +62,7 @@ const Library = () => {
                   <div className=" text-black font-bold text-xl text-center">
                     My Library
                   </div>
-                  <hr className="border-black w-full" />
+                  <hr className="border-black w-full pb-3 sm:pb-0 lg:pb-3"/>
                 </div>
                 <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-10">
                   {lib?.map((b, key) => {
