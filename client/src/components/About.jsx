@@ -6,7 +6,7 @@ import BookImg from "../assets/Book.png";
 const About = () => {
   return (
     <>
-      <div className="flex flex-col sm:flex-row my-7 text-lg md:text-2xl gap-12 lg:gap-24">
+      <div className="flex flex-col sm:flex-row my-7 text-lg md:text-2xl gap-12 lg:gap-24 mx-3">
         <div className="flex flex-col justify-center items-center shadow-lg shadow-gray-400 rounded-lg p-10 hover:bg-gray-200 duration-150 hover:shadow-xl hover:shadow-gray-400">
           <div className="w-24 lg:w-52">
             <img src={BookImg} alt="" />
