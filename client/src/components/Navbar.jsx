@@ -28,7 +28,7 @@ const Navbar = () => {
           <div className="text-3xl md:text-4xl font-medium">
             <NavLink to="/">Book Nation</NavLink>
           </div>
-          <div className="mx-3 sm:flex gap-3 font-radio hidden sm:visible">
+          <div className="mx-3 md:flex gap-3 font-radio hidden md:visible">
             <NavLink
               to="/"
               className="bg-secondary rounded-full px-4 py-2 hover:bg-emerald-900 duration-100"
@@ -47,10 +47,16 @@ const Navbar = () => {
             >
               Top Books
             </NavLink>
+            <NavLink
+              to="notes"
+              className="bg-secondary rounded-full px-4 py-2 hover:bg-emerald-900 duration-100"
+            >
+              Notes
+            </NavLink>
           </div>
         </div>
         {menuState ? (
-          <div className="w-8 sm:hidden">
+          <div className="w-8 md:hidden">
             <CloseMenuSvg
               onClick={() => {
                 setMenuState(false);
@@ -63,13 +69,13 @@ const Navbar = () => {
             onClick={() => {
               setMenuState(true);
             }}
-            className="w-8 sm:hidden"
+            className="w-8 md:hidden"
           >
             <MenuSvg></MenuSvg>
             <DropDown animate={{ x: 800 }}></DropDown>
           </div>
         )}
-        <div className="sm:flex gap-3 text-lg hidden sm:visible">
+        <div className="md:flex gap-3 text-lg hidden md:visible">
           {mode === "logged-out" ? (
             <NavLink
               to="login"

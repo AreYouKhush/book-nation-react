@@ -29,7 +29,7 @@ router.post("/:bookId", authMiddleware, async (req, res) => {
     { $push: { notes: _id } }
   );
 
-  res.json({msg: "Success"});
+  res.json({ _id: _id });
 });
 
 router.put("/:noteId", authMiddleware, async (req, res) => {
@@ -45,8 +45,7 @@ router.put("/:noteId", authMiddleware, async (req, res) => {
     if (found != -1) {
       await Notes.updateOne(
         { _id: noteId },
-        { title: title,
-        description: description }
+        { title: title, description: description }
       );
       return res.json("Updated");
     }
@@ -58,14 +57,12 @@ router.delete("/:noteId", authMiddleware, async (req, res) => {
   const noteId = req.params.noteId;
   const findNote = await User.findOneAndUpdate(
     { email: res.locals.data },
-    { $pull: { notes: noteId }}
+    { $pull: { notes: noteId } }
   );
   if (findNote.notes.length !== 0) {
     const found = findNote.notes.findIndex((c) => c == noteId);
     if (found != -1) {
-      await Notes.deleteOne(
-        { _id: noteId }
-      );
+      await Notes.deleteOne({ _id: noteId });
       return res.json("Deleted");
     }
   }

@@ -16,6 +16,8 @@ import Register from "./components/Register.jsx";
 import BookSearchResults from "./components/BookSearchResults.jsx";
 import AppBookContext from "./BookContext.jsx";
 import BookInfo from "./components/BookInfo.jsx";
+import Notes from "./components/Notes.jsx";
+import NotesPerBook from "./components/NotesPerBook.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +29,8 @@ const router = createBrowserRouter(
       <Route path="topbooks" element={<TopBooks></TopBooks>}></Route>
       <Route path="booksearch" element={<BookSearchResults></BookSearchResults>}></Route>
       <Route path="bookinfo/works/:bookid" element={<BookInfo/>}></Route>
+      <Route path="notes" element={<Notes/>}></Route>
+      <Route path="notes/works/:bookid" element={<NotesPerBook/>}></Route>
     </Route>
   )
 );
