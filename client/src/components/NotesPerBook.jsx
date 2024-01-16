@@ -161,7 +161,7 @@ const BookInfo = () => {
             <div className="font-semibold text-base sm:text-xl break-all">
               {bookData.authorName}
             </div>
-            <div className={toggleMore ? "h-fit" : "h-36 overflow-hidden"}>
+            <div className={toggleMore ? "h-fit break-all" : "h-36 overflow-hidden break-all"}>
               {bookData.description}
             </div>
           </div>
@@ -239,7 +239,7 @@ const BookInfo = () => {
                         </div>
                       </div>
                       <hr className="border-gray-400 my-3" />
-                      <div>{n.description}</div>
+                      <div className="break-all">{n.description}</div>
                       <div
                         className="absolute top-2 right-2 w-5 opacity-50 hover:opacity-75"
                         onClick={() => {
