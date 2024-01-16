@@ -11,7 +11,6 @@ const Library = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const { mode } = useBookContext();
   const [lib, setLib] = useState();
-  const [temp, setTemp] = useState();
 
   const getLib = async () => {
     const response = await axios.get(url + "library", {
@@ -19,10 +18,15 @@ const Library = () => {
         token: cookies.token,
       },
     });
+    const notesResponse = await axios.get(url + "notes/single/library", {
+      headers: {
+        token: cookies.token,
+      },
+    });
     const libRecieved = response.data.library;
     const bookStats = response.data.bookStats;
     try {
-      const modLib = libRecieved.map((l) => ({
+      let modLib = libRecieved.map((l) => ({
         ...l,
         read: bookStats.some((bs) => {
           if (l.id === bs.bookid) {
@@ -30,8 +34,18 @@ const Library = () => {
           }
         }),
       }));
+      modLib = modLib.map((l) => ({
+        ...l,
+        note:
+          notesResponse.data.notes.find(
+            (nr) => "/works/" + nr.bookid === l.id
+          ) || null,
+      }));
+      // del = del.sort((a, b) =>
+      //   a.deletable === b.deletable ? 0 : a.deletable ? 1 : -1
+      // );
+      modLib = modLib.sort((a, b) => (a.note === null ? 1 : -1));
       setLib([...modLib]);
-      setTemp([...modLib]);
     } catch (err) {}
   };
 
@@ -74,8 +88,12 @@ const Library = () => {
                 <div className="flex flex-col gap-5 sm:gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
                   {lib?.map((b, key) => {
                     return (
-                      <NavLink to={`/notes` + b.id} key={key} className="relative">
-                        <div className="flex cursor-pointer gap-2 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 duration-150 h-44">
+                      <NavLink
+                        to={`/notes` + b.id}
+                        key={key}
+                        className="relative"
+                      >
+                        <div className="flex cursor-pointer gap-2 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 duration-150 h-44 max-h-52">
                           <div className="flex items-center lg:w-2/5">
                             <img
                               src={b.coverURL}
@@ -83,13 +101,23 @@ const Library = () => {
                               className="w-24 object-contain"
                             />
                           </div>
-                          <div className="lg:w-3/5">
+                          <div className="lg:w-3/5 overflow-hidden">
                             <div className="font-bold w-56">{b.title}</div>
-                            <div>Note Title</div>
-                            <div>Note Description</div>
+                            <hr className="border-black"/>
+                            <div className="overflow-hidden pt-2">
+                              {b.note ? (
+                                <div className="max-w-56">
+                                  <div className="font-semibold text-sm">{b.note.title}</div>
+                                  <hr />
+                                  <div className="text-sm">{b.note.description}</div>
+                                </div>
+                              ) : (
+                                <div className="text-sm">No Notes to Preview</div>
+                              )}
+                            </div>
                           </div>
-                          <div className="absolute bottom-2 right-2 text-xs font-semibold">
-                            Show more...
+                          <div className="absolute bottom-2 right-2 text-xs font-semibold bg-primary text-white px-3 py-1 rounded-full cursor-pointer">
+                            {b.note ? "Show more ->" : "Add Note ->"}
                           </div>
                         </div>
                       </NavLink>

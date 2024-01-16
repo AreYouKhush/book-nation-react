@@ -14,39 +14,44 @@ const DropDown = ({ animate, setLogoutModal }) => {
   const navigate = useNavigate();
 
   const searchBooks = async () => {
-    setSearching(true);
-    setBooks([]);
-    const newBooks = [];
-    const result = await axios.get(
-      `https://openlibrary.org/search.json?q=${search}`
-    );
-    let authorName;
-    let authorNameProperty = "author_name";
-    let coverIdProperty = "cover_i";
-    let coverId;
-    for (let i = 0; i < Math.min(result.data.docs.length, 20); i++) {
-      if (result.data.docs[i].hasOwnProperty(authorNameProperty)) {
-        authorName = result.data.docs[i].author_name[0];
-      } else {
-        authorName = "Unknown";
-      }
+    if (search.trim() !== "") {
+      localStorage.removeItem("books");
+      setSearching(true);
+      navigate("/booksearch");
+      setBooks([]);
+      const newBooks = [];
+      const result = await axios.get(
+        `https://openlibrary.org/search.json?q=${search}`
+      );
+      let authorName;
+      let authorNameProperty = "author_name";
+      let coverIdProperty = "cover_i";
+      let coverId;
+      for (let i = 0; i < Math.min(result.data.docs.length, 20); i++) {
+        if (result.data.docs[i].hasOwnProperty(authorNameProperty)) {
+          authorName = result.data.docs[i].author_name[0];
+        } else {
+          authorName = "Unknown";
+        }
 
-      if (result.data.docs[i].hasOwnProperty(coverIdProperty)) {
-        let c = result.data.docs[i].cover_i;
-        coverId = `https://covers.openlibrary.org/b/id/${c}-L.jpg`;
+        if (result.data.docs[i].hasOwnProperty(coverIdProperty)) {
+          let c = result.data.docs[i].cover_i;
+          coverId = `https://covers.openlibrary.org/b/id/${c}-L.jpg`;
 
-        newBooks.push({
-          id: result.data.docs[i].key,
-          coverURL: coverId,
-          title: result.data.docs[i].title,
-          publishYear: result.data.docs[i].first_publish_year,
-          authorName: authorName,
-        });
+          newBooks.push({
+            id: result.data.docs[i].key,
+            coverURL: coverId,
+            title: result.data.docs[i].title,
+            publishYear: result.data.docs[i].first_publish_year,
+            authorName: authorName,
+          });
+        }
       }
+      setBooks([...newBooks]);
+      localStorage.setItem("books", JSON.stringify(newBooks));
+      setSearching(false);
+      setSearch("");
     }
-    setBooks([...newBooks]);
-    setSearching(false);
-    navigate("/booksearch");
   };
 
   return (
@@ -81,17 +86,26 @@ const DropDown = ({ animate, setLogoutModal }) => {
               </div>
             </div>
             <div className="w-full flex flex-col m-5 gap-3 items-center">
-              <button className="font-bold bg-secondary rounded-full px-5 py-3 text-center w-32">
-                <NavLink to="login">Login</NavLink>
-              </button>
-              <button className="font-bold bg-secondary rounded-full px-5 py-3 text-center w-32">
-                <NavLink to="register">Register</NavLink>
-              </button>
+              <NavLink to="/">
+                <button className="rounded-full bg-gray-300 text-primary font-bold px-5 py-3 w-32">
+                  Home
+                </button>
+              </NavLink>
+              <NavLink to="login">
+                <button className="font-bold bg-secondary rounded-full px-5 py-3 text-center w-32">
+                  Login
+                </button>
+              </NavLink>
+              <NavLink to="register">
+                <button className="font-bold bg-secondary rounded-full px-5 py-3 text-center w-32">
+                  Register
+                </button>
+              </NavLink>
             </div>
           </>
         ) : (
           <>
-            <div className="flex flex-col gap-3 justify-center items-center">
+            <div className="flex flex-col gap-3 justify-center items-center text-center">
               <div className="relative">
                 <input
                   value={search}
@@ -109,18 +123,30 @@ const DropDown = ({ animate, setLogoutModal }) => {
                   />
                 </button>
               </div>
-              <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
-                <NavLink to="/">Home</NavLink>
-              </button>
-              <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
-                <NavLink to="topbooks">Top Books</NavLink>
-              </button>
-              <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
-                <NavLink to="library">Library</NavLink>
-              </button>
-              <button className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3">
-                <NavLink to="notes">Notes</NavLink>
-              </button>
+              <NavLink
+                to="/"
+                className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3"
+              >
+                <button>Home</button>
+              </NavLink>
+              <NavLink
+                to="topbooks"
+                className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3"
+              >
+                <button>Top Books</button>
+              </NavLink>
+              <NavLink
+                to="library"
+                className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3"
+              >
+                <button>Library</button>
+              </NavLink>
+              <NavLink
+                to="notes"
+                className="rounded-full bg-gray-300 text-primary font-bold w-9/12 px-5 py-3"
+              >
+                <button>Notes</button>
+              </NavLink>
             </div>
             <div className="w-full flex justify-center">
               <button

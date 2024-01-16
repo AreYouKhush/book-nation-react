@@ -92,7 +92,7 @@ const Navbar = () => {
               onClick={() => {
                 setLogoutModal(true);
               }}
-              className="bg-gray-300 text-primary px-6 py-3 font-semibold hover:bg-gray-500 hover:text-gray-300 duration-200"
+              className="bg-gray-300 text-primary px-4 py-3 font-semibold hover:bg-gray-500 hover:text-gray-300 duration-200"
             >
               Logout
             </button>
@@ -101,7 +101,7 @@ const Navbar = () => {
       </div>
       {logoutModal && (
         <div className="fixed w-full bg-transparent backdrop-blur-sm top-0 right-0 bottom-0 z-50 flex justify-center items-center text-white font-fira">
-          <div className="flex flex-col gap-5 bg-primary px-10 xs:px-16 py-10 rounded-xl justify-center items-center">
+          <div className="flex flex-col gap-5 bg-primary px-10 xs:px-16 py-10 rounded-xl justify-center items-center shadow-lg">
             <div className="text-base xs:text-xl">Are you sure about that?</div>
             <div className="flex justify-between gap-5">
               <div

@@ -3,6 +3,7 @@ import InstagramIcon from "../assets/instagram.png";
 import TwitterIcon from "../assets/twitter.png";
 import FacebookIcon from "../assets/facebook.png";
 import BookNationLogo from "../assets/BookNationLogobyDesigner.png";
+import GithubIcon from "../assets/github-mark-white.png";
 
 const Footer = () => {
   return (
@@ -41,26 +42,41 @@ const Footer = () => {
             <div className="flex flex-col">
               <div className="font-bold py-2 text-sm ">Follow Us:</div>
               <div className="flex gap-2">
-                <img
-                  src={InstagramIcon}
-                  alt=""
-                  className="h-7 md:h-10 cursor-pointer"
-                />
-                <img
-                  src={FacebookIcon}
-                  alt=""
-                  className="h-7 md:h-10 cursor-pointer"
-                />
-                <img src={TwitterIcon} alt="" className="h-7 md:h-10 cursor-pointer" />
+                <a href="https://twitter.com/are_you_khushh">
+                  <img
+                    src={InstagramIcon}
+                    alt=""
+                    className="h-7 md:h-10 cursor-pointer"
+                  />
+                </a>
+                <a href="https://twitter.com/are_you_khushh">
+                  <img
+                    src={FacebookIcon}
+                    alt=""
+                    className="h-7 md:h-10 cursor-pointer"
+                  />
+                </a>
+                <a href="https://twitter.com/are_you_khushh">
+                  <img
+                    src={TwitterIcon}
+                    alt=""
+                    className="h-7 md:h-10 cursor-pointer"
+                  />
+                </a>
               </div>
             </div>
           </div>
         </div>
         <div className="absolute w-full p-2 md:p-5 bottom-0">
           <hr />
-          <div className="text-center pt-2 xs:text-base text-sm">
-            2024 Book Nation. Powered by{" "}
-            <a href="https://openlibrary.org/">Open Library</a>
+          <div className="text-center pt-2 xs:text-base text-sm flex justify-center items-center gap-3">
+            <div>
+              2024 Book Nation. Powered by{" "}
+              <a href="https://openlibrary.org/">Open Library.</a>
+            </div>
+            <a href="https://github.com/AreYouKhush">
+              <img src={GithubIcon} alt="" className="w-6" />
+            </a>
           </div>
         </div>
       </div>

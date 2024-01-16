@@ -16,6 +16,23 @@ router.get("/:bookId", authMiddleware, async (req, res) => {
   res.send({ notes: findBookNotes });
 });
 
+router.get("/single/library", authMiddleware, async (req, res) => {
+  const userResponse = await User.findOne(
+    { email: res.locals.data },
+    { library: true, notes: true }
+  );
+  const notesResponse = await Notes.find({ _id: { $in: userResponse.notes } });
+  const tempSet = new Set();
+  const singleNotesArr = notesResponse.filter((n) => {
+    if (tempSet.has(n.bookid)) {
+    } else {
+      tempSet.add(n.bookid);
+      return n;
+    }
+  });
+  res.send({ notes: singleNotesArr });
+});
+
 router.post("/:bookId", authMiddleware, async (req, res) => {
   const newNote = new Notes({
     bookid: req.params.bookId,
