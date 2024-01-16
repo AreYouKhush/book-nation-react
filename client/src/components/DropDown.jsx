@@ -6,7 +6,7 @@ import { useBookContext } from "../BookContext";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
-const DropDown = (props) => {
+const DropDown = ({ animate, setLogoutModal }) => {
   const { mode, setMode, books, setBooks, searching, setSearching } =
     useBookContext();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -49,16 +49,10 @@ const DropDown = (props) => {
     navigate("/booksearch");
   };
 
-  const logout = () => {
-    removeCookie("token");
-    localStorage.removeItem("library")
-    setMode("logged-out");
-  };
-
   return (
     <>
       <motion.div
-        {...props}
+        animate={animate}
         className={
           mode === "logged-out"
             ? "fixed w-9/12 xs:w-5/12 z-20 right-0 top-20 bottom-0 bg-primary flex flex-col justify-start font-fira items-center"
@@ -130,10 +124,10 @@ const DropDown = (props) => {
             </div>
             <div className="w-full flex justify-center">
               <button
-                onClick={logout}
+                onClick={() => setLogoutModal(true)}
                 className="m-5 font-bold bg-secondary rounded-full px-5 py-3 text-center opacity-100 hover:bg-red-500 w-32"
               >
-                <a href="/">Logout</a>
+                Logout
               </button>
             </div>
           </>
