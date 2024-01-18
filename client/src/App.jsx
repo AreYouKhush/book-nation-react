@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { Outlet } from "react-router-dom";
 import "./App.css"
@@ -11,6 +11,18 @@ const App = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies(["token"])
   const {setMode} = useBookContext();
+  const [user, setUser] = useState(null);
+
+  const getUser = async() => {
+    try{
+      const {data} = await axios.get(url + "auth/login/success", {withCredentials: true});
+      setUser(data.user._json);
+      setMode("logged-in");
+      console.log(data.user._json)
+    }catch(err){
+      console.log({err});
+    }
+  }
 
   const authVerifyToken = async () => {
     const response = await axios.get(`${url}user/auth`, {
@@ -30,6 +42,7 @@ const App = () => {
       setMode("logged-in");
     }
     authVerifyToken();
+    getUser();
   }, []);
 
   return (

@@ -9,6 +9,7 @@ import { url } from "../helpers/url";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useBookContext } from "../BookContext";
+import googleIcom from "../assets/google.png";
 
 const Login = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
@@ -29,19 +30,23 @@ const Login = () => {
       navigate("/");
     }
     setMsg(response.data.msg);
-    setTimeout(()=>{
+    setTimeout(() => {
       setMsg("");
-    }, 2000)
+    }, 2000);
     actions.resetForm();
+  };
+
+  const googleAuth = () => {
+    window.open(url + "auth/google/callback", "_self");
   };
 
   return (
     <>
       <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center p-10">
-        <div className="w-6/6 lg:w-2/6 sm:static absolute sm:3/6 -z-10">
+        <div className="hidden md:flex w-6/6 lg:w-2/6 sm:static absolute sm:3/6 -z-10">
           <img src={PleaseLoginImg} alt="" />
         </div>
-        <div className="w-6/6 lg:w-2/6">
+        <div className="w-6/6 lg:w-2/6 flex flex-col justify-center items-center gap-3">
           <Formik
             initialValues={initialValues}
             validationSchema={LoginSchema}
@@ -61,10 +66,15 @@ const Login = () => {
                   placeholder="Enter your password"
                   label="Password"
                 />
-                <NavLink to="/register" className="hover:opacity-85 text-sm font-bold underline">
+                <NavLink
+                  to="/register"
+                  className="hover:opacity-85 text-sm font-bold underline"
+                >
                   new? register now
                 </NavLink>
-                {msg !== "" && <div className="text-red-500 font-bold text-sm">{msg}</div>}
+                {msg !== "" && (
+                  <div className="text-red-500 font-bold text-sm">{msg}</div>
+                )}
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -91,6 +101,15 @@ const Login = () => {
               </Form>
             )}
           </Formik>
+          <button
+            className="flex items-center justify-center gap-3 bg-gray-200 p-2 rounded-lg w-fit"
+            onClick={googleAuth}
+          >
+            <div className="w-10">
+              <img src={googleIcom} alt="" />
+            </div>
+            <span>Sign in with Google</span>
+          </button>
         </div>
       </div>
     </>

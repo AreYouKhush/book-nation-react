@@ -1,15 +1,32 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-const app = express();
 const cors = require("cors");
+const passport = require("passport");
+const cookieSession = require("cookie-session");
+const passportSetup = require("./passport");
+require("dotenv").config();
+const app = express();
 const userRouter = require("./api/routes/user");
 const commentRouter = require("./api/routes/comment");
 const noteRouter = require("./api/routes/notes");
 const libraryRouter = require("./api/routes/library");
-const bookRouter = require("./api/routes/book")
+const bookRouter = require("./api/routes/book");
+const authRouter = require("./api/routes/auth");
+
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["some-secret"],
+    maxAge: 24 * 60 * 60 * 100,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Middleware for parsing request bodies
 app.use(bodyParser.json());
+
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -37,17 +54,26 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.static("./public"));
-// app.use(cors())
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true,
+//   })
+// );
 
 app.get("/", (req, res) => {
   res.send("Connected");
 });
 
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/comment", commentRouter);
 app.use("/notes", noteRouter);
 app.use("/library", libraryRouter);
-app.use("/book", bookRouter)
+app.use("/book", bookRouter);
 
 module.exports = app;

@@ -33,7 +33,7 @@ const Footer = () => {
                   className="rounded-full bg-secondary shadow-md px-3 py-2 xs:px-10 xs:py-3"
                 />
               </div>
-              <button className="rounded-full bg-gray-300 text-black font-bold xs:px-5 hover:bg-gray-500 hover:text-gray-300 duration-200 h-10 xs:h-12 w-20 xs:w-24 text-sm lg:text-lg lg:w-28">
+              <button className="rounded-full text-center bg-gray-300 text-black font-bold xs:px-5 hover:bg-gray-500 hover:text-gray-300 duration-200 h-10 xs:h-12 w-20 xs:w-24 text-sm lg:text-base lg:w-28">
                 Subscribe
               </button>
             </div>

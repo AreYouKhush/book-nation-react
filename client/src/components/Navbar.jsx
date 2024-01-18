@@ -6,6 +6,8 @@ import { useCookies } from "react-cookie";
 import { MenuSvg } from "./MenuSvg";
 import CloseMenuSvg from "./CloseMenuSvg";
 import DropDown from "./DropDown";
+import axios from "axios";
+import { url } from "../helpers/url";
 
 const Navbar = () => {
   const { mode, setMode } = useBookContext();
@@ -14,6 +16,7 @@ const Navbar = () => {
   const [logoutModal, setLogoutModal] = useState(false);
 
   const logout = () => {
+    axios.get(url + "auth/logout", {withCredentials: true});
     removeCookie("token");
     setMode("logged-out");
     localStorage.removeItem("library");

@@ -7,6 +7,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 import PleaseRegisterImg from "../assets/PleaseRegister.png";
 import axios from "axios";
 import { url } from "../helpers/url";
+import googleIcom from "../assets/google.png";
 
 const Register = () => {
   const initialValues = {
@@ -22,22 +23,26 @@ const Register = () => {
 
   const onSubmit = async (values, actions) => {
     const response = await axios.post(url + "user/signup", values);
-    if(response.data.msg === "Success"){
-        navigate('/login');
+    if (response.data.msg === "Success") {
+      navigate("/login");
     }
     setMsg(response.data.msg);
-    setTimeout(()=>{
+    setTimeout(() => {
       setMsg("");
-    }, 2000)
+    }, 2000);
     actions.resetForm();
+  };
+
+  const googleAuth = () => {
+    window.open(url + "auth/google/callback", "_self");
   };
 
   return (
     <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center p-10">
-      <div className="w-6/6 lg:w-2/6 sm:static absolute sm:3/6 -z-10">
+      <div className="w-6/6 hidden md:flex lg:w-2/6 sm:static absolute sm:3/6 -z-10">
         <img src={PleaseRegisterImg} alt="" />
       </div>
-      <div className="w-3/6 lg:w-2/6">
+      <div className="w-3/6 lg:w-2/6 flex flex-col justify-center items-center gap-3">
         <Formik
           initialValues={initialValues}
           validationSchema={RegisterSchema}
@@ -69,10 +74,15 @@ const Register = () => {
                 placeholder="Confirm password"
                 label="Confirm Password"
               />
-              <NavLink to="/login" className="hover:opacity-85 text-sm font-bold underline whitespace-nowrap">
+              <NavLink
+                to="/login"
+                className="hover:opacity-85 text-sm font-bold underline whitespace-nowrap"
+              >
                 already registered? login
               </NavLink>
-              {msg !== "" && <div className="text-red-500 font-bold text-sm">{msg}</div>}
+              {msg !== "" && (
+                <div className="text-red-500 font-bold text-sm">{msg}</div>
+              )}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -99,6 +109,15 @@ const Register = () => {
             </Form>
           )}
         </Formik>
+        <button
+          className="flex items-center justify-center gap-3 bg-gray-200 p-2 rounded-lg w-fit text-nowrap"
+          onClick={googleAuth}
+        >
+          <div className="w-10">
+            <img src={googleIcom} alt="" />
+          </div>
+          <span>Sign up with Google</span>
+        </button>
       </div>
     </div>
   );
