@@ -47,6 +47,7 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(
   cors({
     origin: ["https://book-nation-react.vercel.app"],
