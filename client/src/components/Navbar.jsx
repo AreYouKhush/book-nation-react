@@ -10,9 +10,8 @@ import axios from "axios";
 import { url } from "../helpers/url";
 
 const Navbar = () => {
-  const { mode, setMode } = useBookContext();
+  const { mode, setMode, menuState, setMenuState } = useBookContext();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const [menuState, setMenuState] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
 
   const logout = () => {

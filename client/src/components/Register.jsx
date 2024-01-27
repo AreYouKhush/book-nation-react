@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { RegisterSchema } from "../helpers/FormSchema";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -8,8 +8,10 @@ import PleaseRegisterImg from "../assets/PleaseRegister.png";
 import axios from "axios";
 import { url } from "../helpers/url";
 import googleIcom from "../assets/google.png";
+import { useBookContext } from "../BookContext";
 
 const Register = () => {
+  const {setMenuState} = useBookContext();
   const initialValues = {
     username: "",
     email: "",
@@ -36,6 +38,10 @@ const Register = () => {
   const googleAuth = () => {
     window.open(url + "auth/google/callback", "_self");
   };
+
+  useEffect(() => {
+    setMenuState(false)
+  }, [])
 
   return (
     <div className="h-dvh flex flex-col-reverse sm:flex-row justify-center items-center p-10">

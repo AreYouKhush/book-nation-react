@@ -3,10 +3,15 @@ import Footer from "./Footer";
 import { bookData } from "../assets/books";
 import { url } from "../helpers/url";
 import Search from "./Search";
+import { useBookContext } from "../BookContext";
 
 const TopBooks = () => {
-
+  const {setMenuState} = useBookContext();
   const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    setMenuState(false);
+  }, [])
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeroImg from "../assets/Hero Image.png";
 import FeaturedBooks from "./FeaturedBooks";
 import About from "./About";
@@ -9,7 +9,11 @@ import { NavLink } from "react-router-dom";
 
 const Home = () => {
 
-  const {mode} = useBookContext();
+  const {mode, setMenuState} = useBookContext();
+
+  useEffect(() => {
+    setMenuState(false);
+  }, [])
 
   return (
     <>

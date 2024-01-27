@@ -9,7 +9,7 @@ import { useBookContext } from "../BookContext";
 
 const Library = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
-  const { mode } = useBookContext();
+  const { mode, setMenuState } = useBookContext();
   const [lib, setLib] = useState();
 
   const getLib = async () => {
@@ -51,6 +51,7 @@ const Library = () => {
 
   useEffect(() => {
     getLib();
+    setMenuState(false);
   }, []);
 
   return (

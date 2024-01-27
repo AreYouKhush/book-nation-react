@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PleaseLoginImg from "../assets/PleaseLogin.png";
 import { Formik, Form } from "formik";
 import CustomInput from "./CustomInput";
@@ -13,7 +13,7 @@ import googleIcom from "../assets/google.png";
 
 const Login = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const { mode, setMode } = useBookContext();
+  const { mode, setMode, setMenuState } = useBookContext();
   const navigate = useNavigate();
   const [msg, setMsg] = useState("");
 
@@ -39,6 +39,10 @@ const Login = () => {
   const googleAuth = () => {
     window.open(url + "auth/google/callback", "_self");
   };
+
+  useEffect(() => {
+    setMenuState(false)
+  }, [])
 
   return (
     <>
