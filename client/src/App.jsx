@@ -18,9 +18,9 @@ const App = () => {
       const {data} = await axios.get(url + "auth/login/success", {withCredentials: true});
       setUser(data.user._json);
       setMode("logged-in");
-      console.log(data.user._json)
+      // console.log(data.user._json)
     }catch(err){
-      console.log({err});
+      // console.log({err});
     }
   }
 
