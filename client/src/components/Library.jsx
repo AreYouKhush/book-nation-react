@@ -7,6 +7,7 @@ import { url } from "../helpers/url";
 import { useCookies } from "react-cookie";
 import { useBookContext } from "../BookContext";
 import deleteIcon from "../assets/delete_3807871.png";
+import GridLoader from "react-spinners/GridLoader";
 
 const Library = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -15,33 +16,42 @@ const Library = () => {
   const [temp, setTemp] = useState();
   const [toDelete, setToDelete] = useState([]);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const deleteFromLib = (_id) => {
-    const findBook = lib.find((l) => l._id === _id);
+  const deleteFromLib = (id) => {
+    const findBook = lib.find((l) => l.id === id);
     let modLib;
     if (findBook.selected === false) {
       modLib = lib.map((l) => {
         return {
           ...l,
-          selected: l.selected || _id === l._id,
+          selected: l.selected || id === l.id,
         };
       });
-      setToDelete((prev) => [...prev, _id]);
+      setToDelete((prev) => [...prev, id]);
     } else {
       modLib = lib.map((l) => ({
         ...l,
-        selected: l._id === _id ? false : l.selected,
+        selected: l.id === id ? false : l.selected,
       }));
-      const filtered = toDelete.filter((t) => t !== _id);
+      const filtered = toDelete.filter((t) => t !== id);
       setToDelete([...filtered]);
     }
     setLib([...modLib]);
-
-    // console.log(toDelete);
   };
 
-  const saveDeleteChanges = () => {
-    // console.log(toDelete);
+  const saveDeleteChanges = async () => {
+    try {
+      await axios.post(
+        url + "library/delete",
+        { bookArr: toDelete },
+        {
+          headers: { token: cookies.token },
+        }
+      );
+      const filter = lib.filter((l) => !toDelete.some((t) => t === l.id));
+      setLib([...filter]);
+    } catch (err) {}
   };
 
   const getLib = async () => {
@@ -64,6 +74,7 @@ const Library = () => {
       }));
       setLib([...modLib]);
       setTemp([...modLib]);
+      setLoading(false);
     } catch (err) {}
   };
 
@@ -145,49 +156,55 @@ const Library = () => {
                   </div>
                   <hr className="border-black w-full pb-3 sm:pb-0 lg:pb-3" />
                 </div>
-                <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-10">
-                  {lib?.map((b, key) => {
-                    return (
-                      <div
-                        key={key}
-                        className={
-                          b.selected
-                            ? "max-w-56 cursor-pointer opacity-50"
-                            : "max-w-56 cursor-pointer"
-                        }
-                      >
-                        <NavLink to={`/bookinfo` + b.id}>
-                          <div>
-                            <img
-                              src={b.coverURL}
-                              alt=""
-                              className="aspect-square h-60 sm:h-80 object-contain"
-                            />
-                          </div>
-                        </NavLink>
-                        {deleteMode && (
-                          <div
-                            className="my-2 flex justify-between bg-gray-500 items-center text-white font-bold p-2 rounded-full hover:bg-opacity-80 shadow-md hover:shadow-lg active:shadow-md"
-                            onClick={() => {
-                              deleteFromLib(b._id);
-                            }}
-                          >
-                            <div className="px-5">Remove</div>
-                            <div className="w-8">
-                              <img src={deleteIcon} alt="" />
+                {loading ? (
+                  <div>
+                    <GridLoader color="black" size={90} />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 items-center place-items-center sm:grid-cols-3 md:grid-cols-4 gap-5 sm:gap-10">
+                    {lib?.map((b, key) => {
+                      return (
+                        <div
+                          key={key}
+                          className={
+                            b.selected
+                              ? "max-w-56 cursor-pointer opacity-50"
+                              : "max-w-56 cursor-pointer"
+                          }
+                        >
+                          <NavLink to={`/bookinfo` + b.id}>
+                            <div>
+                              <img
+                                src={b.coverURL}
+                                alt=""
+                                className="aspect-square h-60 sm:h-80 object-contain"
+                              />
                             </div>
+                          </NavLink>
+                          {deleteMode && (
+                            <div
+                              className="my-2 flex justify-between bg-gray-500 items-center text-white font-bold p-2 rounded-full hover:bg-opacity-80 shadow-md hover:shadow-lg active:shadow-md"
+                              onClick={() => {
+                                deleteFromLib(b.id);
+                              }}
+                            >
+                              <div className="px-5">Remove</div>
+                              <div className="w-8">
+                                <img src={deleteIcon} alt="" />
+                              </div>
+                            </div>
+                          )}
+                          <div className="h-5 font-bold overflow-hidden max-w-56 break-all">
+                            {b.title}
                           </div>
-                        )}
-                        <div className="h-5 font-bold overflow-hidden max-w-56 break-all">
-                          {b.title}
+                          <div className="h-5 overflow-hidden max-w-56 break-all">
+                            {b.authorName}
+                          </div>
                         </div>
-                        <div className="h-5 overflow-hidden max-w-56 break-all">
-                          {b.authorName}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
                 {deleteMode ? (
                   <div
                     className="bg-gray-400 absolute top-1 right-1 font-bold px-2 py-1 rounded-md text-white cursor-pointer hover:bg-primary duration-150"

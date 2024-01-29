@@ -6,11 +6,13 @@ import Search from "./Search";
 import { url } from "../helpers/url";
 import { useCookies } from "react-cookie";
 import { useBookContext } from "../BookContext";
+import GridLoader from "react-spinners/GridLoader";
 
 const Library = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const { mode, setMenuState } = useBookContext();
   const [lib, setLib] = useState();
+  const [loading, setLoading] = useState(true);
 
   const getLib = async () => {
     const response = await axios.get(url + "library", {
@@ -46,6 +48,7 @@ const Library = () => {
       // );
       modLib = modLib.sort((a, b) => (a.note === null ? 1 : -1));
       setLib([...modLib]);
+      setLoading(false);
     } catch (err) {}
   };
 
@@ -86,45 +89,57 @@ const Library = () => {
                   </div>
                   <hr className="border-black w-full pb-3 mb-3 sm:pb-0 lg:pb-3" />
                 </div>
-                <div className="flex flex-col gap-5 sm:gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
-                  {lib?.map((b, key) => {
-                    return (
-                      <NavLink
-                        to={`/notes` + b.id}
-                        key={key}
-                        className="relative"
-                      >
-                        <div className="flex cursor-pointer gap-2 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 duration-150 h-44 max-h-52">
-                          <div className="flex items-center lg:w-2/5">
-                            <img
-                              src={b.coverURL}
-                              alt=""
-                              className="w-24 object-contain"
-                            />
-                          </div>
-                          <div className="lg:w-3/5 overflow-hidden">
-                            <div className="font-bold w-56">{b.title}</div>
-                            <hr className="border-black"/>
-                            <div className="overflow-hidden pt-2">
-                              {b.note ? (
-                                <div className="max-w-56">
-                                  <div className="font-semibold text-sm">{b.note.title}</div>
-                                  <hr />
-                                  <div className="text-sm">{b.note.description}</div>
-                                </div>
-                              ) : (
-                                <div className="text-sm">No Notes to Preview</div>
-                              )}
+                {loading ? (
+                  <div>
+                    <GridLoader color="black" size={90} />
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-5 sm:gap-10 md:grid md:grid-cols-2 lg:grid-cols-3">
+                    {lib?.map((b, key) => {
+                      return (
+                        <NavLink
+                          to={`/notes` + b.id}
+                          key={key}
+                          className="relative"
+                        >
+                          <div className="flex cursor-pointer gap-2 bg-gray-300 p-2 rounded-lg hover:bg-gray-400 duration-150 h-44 max-h-52">
+                            <div className="flex items-center lg:w-2/5">
+                              <img
+                                src={b.coverURL}
+                                alt=""
+                                className="w-24 object-contain"
+                              />
+                            </div>
+                            <div className="lg:w-3/5 overflow-hidden">
+                              <div className="font-bold w-56">{b.title}</div>
+                              <hr className="border-black" />
+                              <div className="overflow-hidden pt-2">
+                                {b.note ? (
+                                  <div className="max-w-56">
+                                    <div className="font-semibold text-sm">
+                                      {b.note.title}
+                                    </div>
+                                    <hr />
+                                    <div className="text-sm">
+                                      {b.note.description}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="text-sm">
+                                    No Notes to Preview
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="absolute bottom-2 right-2 text-xs font-semibold bg-primary text-white px-3 py-1 rounded-full cursor-pointer">
+                              {b.note ? "Show more ->" : "Add Note ->"}
                             </div>
                           </div>
-                          <div className="absolute bottom-2 right-2 text-xs font-semibold bg-primary text-white px-3 py-1 rounded-full cursor-pointer">
-                            {b.note ? "Show more ->" : "Add Note ->"}
-                          </div>
-                        </div>
-                      </NavLink>
-                    );
-                  })}
-                </div>
+                        </NavLink>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           )}

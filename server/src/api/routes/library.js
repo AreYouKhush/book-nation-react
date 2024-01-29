@@ -36,10 +36,11 @@ router.post("/works/:bookId", authMiddleware, async (req, res) => {
   res.json({ msg: "Added" });
 });
 
-router.delete("/:bookId", authMiddleware, async (req, res) => {
+router.post("/delete", authMiddleware, async (req, res) => {
+  const bookArr = req.body.bookArr.map((b) => b.replace("/works/", ""))
   await User.updateOne(
     { email: res.locals.data },
-    { $pull: { library: { bookid: req.params.bookId } } }
+    { $pull: { library: { bookid: { $in: bookArr } } } }
   );
   res.json("Deleted");
 });
