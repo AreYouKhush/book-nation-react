@@ -2,6 +2,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 
 const CloseMenuSvg = (props) => (
+  
   <svg
     // width={218}
     // height={222}
